@@ -5,7 +5,8 @@ A Discord taskbot that uses GitHub tasks as a backing store.
 
 **`.env`** - Contains secrets loaded from an ENV file. Requires `DISCORD_TOKEN` set with a valid Discord app token:
 
-    DISCORD_TOKEN=SomE-ToK-EN
+    DISCORD_TOKEN=discord-token
+    GITHUB_TOKEN=your-github-token
 
 
 ## Initial Prototype - working notes
