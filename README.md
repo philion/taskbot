@@ -14,4 +14,4 @@ A Discord taskbot that uses GitHub tasks as a backing store.
 * Get initial bot working using [discord.py](https://discordpy.readthedocs.io/). DONE
 * Adding token management with `.env` file. DONE
 * Adding simple github API call to list issues.
-
+* Failure with initial attempt with ghapi. Terrible docs, no example code, cryptic errors. Blah.
