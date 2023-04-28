@@ -9,16 +9,62 @@ import re
 
 from dotenv import load_dotenv
 from discord.ext import commands
+from tabulate import tabulate
 
 # initial version based on local on-disk csv file that is read for every operation. no cache here!
 CSV_FILE = "test.csv"
 
-# setup logging
-discord.utils.setup_logging(level=logging.DEBUG)
-#logging.getLogger().setLevel(logging.DEBUG) # for dev
-log = logging.getLogger(os.path.basename(__file__))
-log.info("starting")
+def main():
+    # setup logging
+    #discord.utils.setup_logging(level=logging.DEBUG)
+    #logging.getLogger().setLevel(logging.DEBUG) # for dev
+    log = logging.getLogger(os.path.basename(__file__))
+    log.setLevel(logging.DEBUG)
+    log.info("starting")
 
+    # load the secrets
+    load_dotenv()
+
+    # setup the bot
+    intents = discord.Intents.default()
+    intents.message_content = True
+    bot = commands.Bot(command_prefix='$', intents=intents)
+
+    @bot.command()
+    async def rows(ctx):
+        with open(CSV_FILE) as csvfile:
+            reader = csv.DictReader(csvfile)
+            df = []
+            for row in reader:
+                df.append(row.values())
+                
+            table = tabulate(df, headers=reader.fieldnames)
+            await ctx.send("```\n" + table + "\n```")
+
+
+    @bot.command()
+    async def cols(ctx):
+        df = []
+        for column in get_cols(CSV_FILE):
+            df.append([column])
+        table = tabulate(df, headers=['column'])
+        await ctx.send("```\n" + table + "\n```")
+
+
+    # https://discordpy.readthedocs.io/en/stable/ext/commands/commands.html#advanced-converters
+    @bot.command()
+    async def add(ctx, *, params: ParamMapper(CSV_FILE)):
+        fields = get_cols(CSV_FILE)
+        with open(CSV_FILE, 'a') as csvfile:
+            writer = csv.DictWriter(csvfile, fields)
+            writer.writerow(params)
+
+        await ctx.send(f'Added row with {params}')
+
+    # run the bot
+    bot.run(os.getenv("DISCORD_TOKEN"))
+
+    
 class ParamMapper(commands.Converter):
     def __init__(self, filename: str):
         self.fields = get_cols(filename)
@@ -70,42 +116,5 @@ def get_cols(filename: str):
         with open(filename) as csvfile:
             return csv.DictReader(csvfile).fieldnames
 
-
-# setup client
-intents = discord.Intents.default()
-intents.message_content = True
-bot = commands.Bot(command_prefix='$', intents=intents)
-
-
-@bot.command()
-async def rows(ctx):
-    with open(CSV_FILE) as csvfile:
-        buffer = ""
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            buffer += '|'.join(row) + '|\n'
-             
-        await ctx.send(buffer)
-
-
-@bot.command()
-async def cols(ctx):
-    fields = get_cols(CSV_FILE)
-    await ctx.send(fields)
-
-# https://discordpy.readthedocs.io/en/stable/ext/commands/commands.html#advanced-converters
-@bot.command()
-async def add(ctx, *, params: ParamMapper(CSV_FILE)):
-    fields = get_cols(CSV_FILE)
-    with open(CSV_FILE, 'a') as csvfile:
-        writer = csv.DictWriter(csvfile, fields)
-        writer.writerow(params)
-
-    await ctx.send(f'Added row with {params}')
-
-
-# load the secrets
-load_dotenv()
-
-# run the client
-bot.run(os.getenv("DISCORD_TOKEN"))
+if __name__ == '__main__':
+    main()
