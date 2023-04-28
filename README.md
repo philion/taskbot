@@ -17,6 +17,22 @@ The prototype is working, now to add the bones: simple commands for adding, edit
 * add -
 * update - 
 
+## proof-of-concept - csvbot
+A bot backed by simple CSV file, where info can be queried, added and updated.
+Eventually, backed by a google sheet.
+
+The bot uses the column names for query and response. i.e. given the columns:
+
+    id, title, project, status, assigned, updated, notes
+
+> $add title="This is a new item" project=ldap
+> $update id=23 assigned=Paul
+> $find status=open assigned=Paul
+
+That's first pass. Starting with https://interactions-py.github.io/interactions.py/Guides/01%20Getting%20Started/#__tabbed_1_2
+
+Putting the new test bot in `cvsbot.py`.
+
 ## Initial Prototype - working notes
 
 * Get initial bot working using [discord.py](https://discordpy.readthedocs.io/). DONE
@@ -25,3 +41,7 @@ The prototype is working, now to add the bones: simple commands for adding, edit
 * Failure with initial attempt with ghapi. Terrible docs, no example code, cryptic errors. Blah.
 * Simple implementation using https://github.com/PyGithub/PyGithub has got list issues working. YAY!
 * Demonstrated: Access to both discord and github to access relevant data end-to-end.
+
+## Notes
+https://github.com/Rapptz/discord.py seems the best client lib for Python.
+https://github.com/interactions-py/interactions.py looks like an insteresting alternative.
