@@ -41,6 +41,9 @@ Next up: id mgt and update command and search/select.
 
 csvbot looks pretty good, and can be backed by either FileBackingStore (use a CSV file on local disk) or SheetsBackingStore (use a specific)
 
+test sheet:
+https://docs.google.com/spreadsheets/d/1NcwrsdE5YvQAgi9CRLC1Kv69DoIAPQiXlA22MvKzXBo/edit
+
 
 ## Initial Prototype
 
@@ -196,5 +199,5 @@ Rough sketch:
 - SheetBacking add() and supporting test case. - DONE!
 - Research and recommend taskbot command, generate TaskManager UX and contract
 - Add task bot commands!
-- Figure out cogs in discord.py
+- Figure out cogs in discord.py - working
 - get dpytest running
