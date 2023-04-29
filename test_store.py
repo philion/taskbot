@@ -47,7 +47,7 @@ class TestSheetsBackingStore:
             'project': random.choice(['acme','rocket','yoyo','skateboard']),
             'status': random.choice(['new','open','working','rejected','closed']),
             'assigned': random.choice(['unassigned','philion','wile','bugs','roadrunner']),
-            'updated': datetime.datetime.now().isoformat(timespec='minutes')
+            'updated': datetime.datetime.now().isoformat(sep=' ', timespec='seconds')
         }
 
         id = store.add(row)

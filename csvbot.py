@@ -13,7 +13,8 @@ from dotenv import load_dotenv
 from discord.ext import commands
 from tabulate import tabulate
 
-import FileBackingStore as store
+#import FileBackingStore as store
+import SheetsBackingStore as store
 
 # initial version based on local on-disk csv file that is read for every operation. no cache here!
 CSV_FILE = "test.csv" # DELETE
@@ -23,12 +24,12 @@ discord.utils.setup_logging(level=logging.DEBUG)
 log = logging.getLogger(os.path.basename(__file__))
 
 def main():
-    bot = CSVBot("test.csv")
+    bot = CSVBot("Taskbot Test Sheet")
 
     @bot.command()
     async def rows(ctx):
         all_rows = bot.store.values()
-        table = tabulate(all_rows, headers=bot.store.fieldnames())
+        table = tabulate(all_rows, headers=bot.store.fieldnames)
         await ctx.send("```\n" + table + "\n```")
 
     @bot.command()
@@ -36,7 +37,7 @@ def main():
         #df = []
         #for field in bot.store.fieldnames(): # this is to for a list of single-element lists.
         #    df.append([field]) 
-        table = tabulate(bot.store.fieldnames())
+        table = tabulate(bot.store.fieldnames)
         await ctx.send("```\n" + table + "\n```")
 
 
@@ -52,7 +53,7 @@ def main():
     @bot.command()
     async def find(ctx, *, params: ParamMapper(CSV_FILE)):
         result = bot.store.find(params)
-        table = tabulate(result, headers=bot.store.fieldnames())
+        table = tabulate(result, headers=bot.store.fieldnames)
         await ctx.send("```\n" + table + "\n```")
     
     # RUN the bot
@@ -62,7 +63,7 @@ def main():
 class CSVBot(commands.Bot):
     def __init__(self, filename: str):
         log.debug("__init__")
-        self.store = store.FileBackingStore(filename)
+        self.store = store.SheetsBackingStore(filename)
 
         # load the secrets
         load_dotenv()

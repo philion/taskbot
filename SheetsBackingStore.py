@@ -75,9 +75,14 @@ class SheetsBackingStore:
     def gen_id(self):
         # just get the highest value in 'id' col and add 1.
         col = self.field_map['id']
-        vals = self.sheet.col_values(col)
-        vals = vals[1:] # strip the 1st value, the header
-        return int(max(vals)) + 1
+        num_rows = len(self.sheet.col_values(col))
+
+        # note: num_rows contains the length including the header row.
+        # -1 to remove header, +1 to add new row
+        id = num_rows
+
+        # there's intended flexibility ar
+        return id
 
     def add(self, params):
         # generate a new ID

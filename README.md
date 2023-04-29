@@ -52,7 +52,7 @@ Next up: id mgt and update command and search/select.
 
 ## Notes
 https://github.com/Rapptz/discord.py seems the best client lib for Python.
-https://github.com/interactions-py/interactions.py looks like an insteresting alternative.
+https://github.com/interactions-py/interactions.py looks like an insteresting alternative. - meh. poor docs.
 
 ### Work Log
 
