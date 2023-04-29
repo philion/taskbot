@@ -1,5 +1,4 @@
 #! /usr/bin/env python3
-# This example requires the 'message_content' intent.
 
 import discord
 import logging
@@ -8,44 +7,55 @@ import asyncio
 
 from dotenv import load_dotenv
 from github import Github
+import FileBackingStore as store
+import ParamMapper as pm
 
+from dotenv import load_dotenv
 from discord.ext import commands
+from tabulate import tabulate
+
 from pathlib import Path
 
-# logging
+
+# setup logging
 log = logging.getLogger(Path(__file__).stem)
 
-async def main():
-    async with bot:
-        await bot.add_cog(Music(bot))
-        await bot.start('token')
 
-
-asyncio.run(main())
-
-# setup client
-intents = discord.Intents.default()
-intents.message_content = True
-client = discord.Client(intents=intents)
-
-# load the secrets
-load_dotenv()
-discord_token = os.getenv("DISCORD_TOKEN")
-
-
-
-# run the client
-client.run(discord_token)
-
+# TaskBot - encapsulate the discord bot operations
 class TaskBot(commands.Bot):
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self, store): # fixme add typing
+        log.debug(f"init TaskBot with {store.__class__}")
+        self.store = store
+
+        # load the secrets
+        load_dotenv()
+
+        # setup the bot
+        intents = discord.Intents.default()
+        intents.message_content = True
+        super().__init__(
+            command_prefix='$', 
+            intents=intents,
+            description='acmrckt taskbot',
+        )
+    
+    async def start(self):
+        log.debug("starting")
+
+        # register cogs
+        await self.add_cog(TaskCog(self))
+
+        # start
+        await super().start(os.getenv("DISCORD_TOKEN"))
 
 
-
+# TaskCog - the task-related commands
 class TaskCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.fields = bot.store.fieldnames
+        self.mapper = pm.ParamMapper(self.fields)
+        log.debug(f"init TaskCog with {self.fields}")
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -62,8 +72,14 @@ class TaskCog(commands.Cog):
         pass
 
     @commands.command()
-    async def list(self, ctx, *, member: discord.Member = None):
-        pass
+    async def list(self, ctx, arg = ''):
+        params = self.mapper.parse(arg) # a string with everything
+        result = self.bot.store.find(params)
+
+
+        table = tabulate(result, headers=self.fields)
+        await ctx.send("```\n" + table + "\n```")
+    
 
     @commands.command()
     async def hello(self, ctx, *, member: discord.Member = None):
@@ -74,3 +90,13 @@ class TaskCog(commands.Cog):
         else:
             await ctx.send(f'Hello {member.name}... This feels familiar.')
         self._last_member = member
+
+
+# main()
+async def main():
+    storage = store.FileBackingStore("test.csv")
+    bot = TaskBot(storage)
+    async with bot:
+        await bot.start()
+
+asyncio.run(main())

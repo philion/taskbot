@@ -5,7 +5,7 @@ import discord
 import os
 import logging
 import csv
-import re
+import tabulate 
 from discord import app_commands
 from discord.ext.commands.help import HelpCommand
 
@@ -15,6 +15,7 @@ from tabulate import tabulate
 
 #import FileBackingStore as store
 import SheetsBackingStore as store
+import ParamMapper
 
 # initial version based on local on-disk csv file that is read for every operation. no cache here!
 CSV_FILE = "test.csv" # DELETE
@@ -79,60 +80,17 @@ class CSVBot(commands.Bot):
 
     
 # Handles the "operations" against the CSV file
-class ParamMapper(commands.Converter):
-    def __init__(self, filename: str):
-        self.fields = get_cols(filename)
-
-    def parse(self, param_str):
-        params = {}
-        last_key = ""
-        rest = ""
-        for tok in re.split(r'[:=]', param_str):
-            try:
-                keyi = tok.rindex(' ')
-                key = tok[keyi:].strip()
-                rest = tok[:keyi].strip()
-                #print(f'"{key}", "{rest}"')
-            except:
-                key = tok.strip()
-                # special end condition: no spaces in last segment
-                rest = key
-                #print(f'{key}')
-
-            # special end condition: last segment has a space, and key has the last segment
-            # how can I detect before the split loop break? don't bother, just re-add? but lastkey has been updated.
-
-            if last_key != "" and rest != "":
-                params[last_key] = rest
-                #print(f'"{last_key}", "{rest}"')
-            last_key = key
-
-        # condition breaking split-loop:
-        # params contains everything correctly except last_key, which is supposed to be appended to the actual value of the last key.
-        try:
-            params[list(params)[-1]] = tok.strip()
-        except Exception as ex:
-            log.error("Error", ex)
-            print(f">>> {params} - {tok} - {last_key} - {rest}")
-
-        return params
-    
-    def validate(self, params):
-        for key, value in params.items():
-            if key in self.fields:
-                print(f"{key}, {value}")
-            else:
-                print(f"missing key: {key}")
-
-
-    async def convert(self, ctx, argument):
-        params = self.parse(argument)
-        #self.validate(params)
-        return params
-
 def get_cols(filename: str):
         with open(filename) as csvfile:
             return csv.DictReader(csvfile).fieldnames
+
+def validate_params(params, expected_fields):
+    for key, value in params.items():
+        if key in expected_fields:
+            print(f"{key}, {value}")
+        else:
+            print(f"missing key: {key}")
+
 
 if __name__ == '__main__':
     main()
