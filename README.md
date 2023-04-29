@@ -37,6 +37,7 @@ Working so for, up to adding new rows and listing.
 
 Next up: id mgt and update command and search/select.
 
+
 ## Initial Prototype - working notes
 
 * Get initial bot working using [discord.py](https://discordpy.readthedocs.io/). DONE
@@ -46,6 +47,21 @@ Next up: id mgt and update command and search/select.
 * Simple implementation using https://github.com/PyGithub/PyGithub has got list issues working. YAY!
 * Demonstrated: Access to both discord and github to access relevant data end-to-end.
 
+
 ## Notes
 https://github.com/Rapptz/discord.py seems the best client lib for Python.
 https://github.com/interactions-py/interactions.py looks like an insteresting alternative.
+
+### Work Log
+
+Just noticed the way I was weaving this doc together, I wasn't leaving myself very clear notes.
+
+2023-04-28
+
+Underlying bot is working with existing (feature-incomplete) expectations. Next step is "update" function, which will require managing the file contents for a full file re-write (the only option, I think, unless the CSV libs provide one). Simple testing in place to keep me from tracking down syntax error via the full discord bot deployment, but dpytest isn't working yet.
+
+Rough sketch:
+- Get update() and a few more tests working
+- Add task bot commands!
+- Figure out cogs in discord.py
+- get dpytest running
