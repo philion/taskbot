@@ -33,6 +33,10 @@ That's first pass. Starting with https://interactions-py.github.io/interactions.
 
 Putting the new test bot in `cvsbot.py`.
 
+Working so for, up to adding new rows and listing.
+
+Next up: id mgt and update command and search/select.
+
 ## Initial Prototype - working notes
 
 * Get initial bot working using [discord.py](https://discordpy.readthedocs.io/). DONE

@@ -2,3 +2,7 @@ discord.py
 PyGithub
 python-dotenv
 tabulate
+
+# trying to see if I can test without running in the Discord UI
+pytest 
+dpytest

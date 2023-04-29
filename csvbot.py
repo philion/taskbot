@@ -1,70 +1,81 @@
 #! /usr/bin/env python3
-# This example requires the 'message_content' intent.
 
+from typing import Any, Optional, Type
 import discord
 import os
 import logging
 import csv
 import re
+from discord import app_commands
+from discord.ext.commands.help import HelpCommand
 
 from dotenv import load_dotenv
 from discord.ext import commands
 from tabulate import tabulate
 
 # initial version based on local on-disk csv file that is read for every operation. no cache here!
-CSV_FILE = "test.csv"
+CSV_FILE = "test.csv" # DELETE
+
+# setup logging
+discord.utils.setup_logging(level=logging.DEBUG)
+log = logging.getLogger(os.path.basename(__file__))
 
 def main():
-    # setup logging
-    #discord.utils.setup_logging(level=logging.DEBUG)
-    #logging.getLogger().setLevel(logging.DEBUG) # for dev
-    log = logging.getLogger(os.path.basename(__file__))
-    log.setLevel(logging.DEBUG)
-    log.info("starting")
-
-    # load the secrets
-    load_dotenv()
-
-    # setup the bot
-    intents = discord.Intents.default()
-    intents.message_content = True
-    bot = commands.Bot(command_prefix='$', intents=intents)
+    bot = CSVBot("test.csv")
 
     @bot.command()
     async def rows(ctx):
-        with open(CSV_FILE) as csvfile:
-            reader = csv.DictReader(csvfile)
-            df = []
-            for row in reader:
-                df.append(row.values())
-                
-            table = tabulate(df, headers=reader.fieldnames)
-            await ctx.send("```\n" + table + "\n```")
-
+        all_rows = bot.store.values()
+        table = tabulate(all_rows, headers=bot.store.fieldnames())
+        await ctx.send("```\n" + table + "\n```")
 
     @bot.command()
     async def cols(ctx):
-        df = []
-        for column in get_cols(CSV_FILE):
-            df.append([column])
-        table = tabulate(df, headers=['column'])
+        #df = []
+        #for field in bot.store.fieldnames(): # this is to for a list of single-element lists.
+        #    df.append([field]) 
+        table = tabulate(bot.store.fieldnames())
         await ctx.send("```\n" + table + "\n```")
 
 
     # https://discordpy.readthedocs.io/en/stable/ext/commands/commands.html#advanced-converters
     @bot.command()
     async def add(ctx, *, params: ParamMapper(CSV_FILE)):
-        fields = get_cols(CSV_FILE)
-        with open(CSV_FILE, 'a') as csvfile:
-            writer = csv.DictWriter(csvfile, fields)
-            writer.writerow(params)
-
+        bot.store.add(params)
         await ctx.send(f'Added row with {params}')
 
-    # run the bot
-    bot.run(os.getenv("DISCORD_TOKEN"))
+
+    # uses the same multi-field style as `add`
+    # this time to match records in the 
+    @bot.command()
+    async def find(ctx, *, params: ParamMapper(CSV_FILE)):
+        result = bot.store.find(params)
+        table = tabulate(result, headers=bot.store.fieldnames())
+        await ctx.send("```\n" + table + "\n```")
+    
+    # RUN the bot
+    bot.run()
+
+
+class CSVBot(commands.Bot):
+    def __init__(self, filename: str):
+        log.debug("__init__")
+        self.store = FileBackingStore(filename)
+
+        # load the secrets
+        load_dotenv()
+
+        # setup the bot
+        intents = discord.Intents.default()
+        intents.message_content = True
+        super().__init__(command_prefix='$', intents=intents)
+    
+    def run(self):
+        log.debug("run")
+        super().run(os.getenv("DISCORD_TOKEN"))
 
     
+# Handles the "operations" against the CSV file
 class ParamMapper(commands.Converter):
     def __init__(self, filename: str):
         self.fields = get_cols(filename)
@@ -95,7 +106,11 @@ class ParamMapper(commands.Converter):
 
         # condition breaking split-loop:
         # params contains everything correctly except last_key, which is supposed to be appended to the actual value of the last key.
-        params[list(params)[-1]] = tok.strip()
+        try:
+            params[list(params)[-1]] = tok.strip()
+        except Exception as ex:
+            log.error("Error", ex)
+            print(f">>> {params} - {tok} - {last_key} - {rest}")
 
         return params
     
