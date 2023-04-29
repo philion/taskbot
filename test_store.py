@@ -50,7 +50,7 @@ class TestSheetsBackingStore:
         assert store.find({'status': 'jolly'})[0]['id'] == 4
 
     def test_update(self):
-        store = FileBackingStore.FileBackingStore("test.csv")
+        store = SheetsBackingStore.SheetsBackingStore("Taskbot Test Sheet")
 
         # confirm status=jolly
         assert store.get('4', 'status') == 'jolly'

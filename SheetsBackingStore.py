@@ -14,20 +14,18 @@ class SheetsBackingStore:
         self.field_map = {}
         # index of fields, and their 1-based sheet index
         for i, field in enumerate(self.fieldnames):
-            self.field_map[field] = i
+            self.field_map[field] = i + 1
 
-    def _field_idx(self, id):
-        return self.field_map[id]
 
     # get all the values as dict[]
     def values(self):
         return self.sheet.get_all_records()
 
     def find_id(self, id):
-        col = self._field_idx('id')
-        log.debug("column for id: {col}")
+        col = self.field_map['id']
+        log.debug(f"column for id: {col}")
         cell = self.sheet.find(id, in_column=col)
-        log.debug("found row: {cell.row}")
+        log.debug(f"found row: {cell.row}")
         return cell
 
     def row(self, id):
@@ -35,11 +33,11 @@ class SheetsBackingStore:
         values = self.sheet.row_values(cell.row)
         # map columns items to names
         row = {}            
-        log.debug(f'{values}')
+        #log.debug(f'{values}')
 
         for col, value in enumerate(values):
             name = self.fieldnames[col]
-            log.debug(f'{name}')
+            #log.debug(f'{name}')
             row[name] = value
 
         return row
@@ -64,17 +62,14 @@ class SheetsBackingStore:
         return result
 
     def update(self, id, params):
-        # find a row
+        cell = self.find_id(id)
 
         # update the values
+        for name, value in params.items():
+            col = self.field_map[name]
+            log.debug(f"Updating a value: {id}, {name}/{col} -> {value}")
 
-        log.debug(f"Updated a value: id={id}, {params}")
-
-    def write(self, rows):
-        with open(self.filename, 'w', newline='') as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=self.fieldnames)
-            writer.writeheader()
-            writer.writerows(rows)
+            self.sheet.update_cell(cell.row, col, value)
 
 
     def add(self, params):
