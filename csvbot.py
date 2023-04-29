@@ -13,6 +13,8 @@ from dotenv import load_dotenv
 from discord.ext import commands
 from tabulate import tabulate
 
+import FileBackingStore as store
+
 # initial version based on local on-disk csv file that is read for every operation. no cache here!
 CSV_FILE = "test.csv" # DELETE
 
@@ -60,7 +62,7 @@ def main():
 class CSVBot(commands.Bot):
     def __init__(self, filename: str):
         log.debug("__init__")
-        self.store = FileBackingStore(filename)
+        self.store = store.FileBackingStore(filename)
 
         # load the secrets
         load_dotenv()

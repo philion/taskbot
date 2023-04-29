@@ -1,13 +1,21 @@
 import csv
+import logging
+from pathlib import Path
+
+log = logging.getLogger(Path(__file__).stem)
 
 class FileBackingStore:
     def __init__(self, filename: str):
         self.filename = filename
+        self.fieldnames = self._get_fieldnames()
 
     # get the column titles, as per csv.DictReader
-    def fieldnames(self):
+    def _get_fieldnames(self):
         with open(self.filename) as csvfile:
             return csv.DictReader(csvfile).fieldnames
+        
+    #def fieldnames(self):
+    #    return self.fieldnames
 
     # get all the values as dict[]
     def values(self):
@@ -26,7 +34,7 @@ class FileBackingStore:
             if row['id'] == id:
                 return row
 
-    def value(self, id, field):
+    def get(self, id, field):
         found = self.row(id)
         if found:
             return found[field]
@@ -48,8 +56,28 @@ class FileBackingStore:
 
     def add(self, params):
         with open(self.filename, 'a') as csvfile:
-            writer = csv.DictWriter(csvfile, self.fieldnames())
+            writer = csv.DictWriter(csvfile, self.fieldnames)
             writer.writerow(params)
 
-    def update(self):
-        pass
+
+    def update(self, id, params):
+        # read the file
+        rows = self.values()
+
+        # update the values
+        for row in rows:
+            if row['id'] == id:
+                row.update(params)
+                break;
+
+        # write the file
+        self.write(rows)
+
+        log.debug(f"Updated a value: id={id}, {params}")
+
+    def write(self, rows):
+        with open(self.filename, 'w', newline='') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=self.fieldnames)
+            writer.writeheader()
+            writer.writerows(rows)
+
