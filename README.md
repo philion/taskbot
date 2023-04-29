@@ -44,6 +44,8 @@ csvbot looks pretty good, and can be backed by either FileBackingStore (use a CS
 test sheet:
 https://docs.google.com/spreadsheets/d/1NcwrsdE5YvQAgi9CRLC1Kv69DoIAPQiXlA22MvKzXBo/edit
 
+cli tool to manage csv with SQL: https://mithrandie.github.io/csvq/reference/command.html
+
 
 ## Initial Prototype
 
@@ -205,4 +207,7 @@ Rough sketch:
 - Add task bot commands! - list and add working
 - Figure out cogs in discord.py - DONE! TaskCog running
 - get dpytest running - DO THIS!!!
+- tasksh - get a simple shell running to eval commands, and capture inputs for testing.
 - github actions to run build on master checking, generate a good profile and coverage report using pytest
+- think about: discord wrapper for any of the Task Manager project. really just a question of backing store.
+- generic discord wrapper for any CLI?

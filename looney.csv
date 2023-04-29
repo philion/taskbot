@@ -1,0 +1,73 @@
+Task,Description,Status,Assigned To,Priority,Estimate,Actual Time,Comments
+1,Acme rocket testing,In progress,Wile E Coyote,High,3 days,2 days,"Rocket failed to launch due to defective ignition system"
+2,Create giant slingshot,Completed,Roadrunner,Medium,1 day,1 day,"Successfully launched Roadrunner across the canyon"
+3,Design spring-loaded boxing gloves,Planned,Wile E Coyote,Low,2 days,,
+4,Paint fake tunnel on cliff,Completed,Wile E Coyote,High,1 day,1 day,"Roadrunner successfully tricked and ran into the tunnel"
+5,Construct giant magnet,In progress,Roadrunner,High,4 days,3 days,"Magnet successfully attracted all metallic objects except for Roadrunner"
+6,Acquire rocket-powered roller skates,Planned,Wile E Coyote,Low,1 day,,
+7,Create fake cactus costume,Completed,Roadrunner,Medium,2 days,2 days,"Roadrunner successfully disguised and fooled Wile E Coyote"
+8,Test jet-powered pogo stick,Completed,Wile E Coyote,High,2 days,2 days,"Pogo stick malfunctioned and sent Wile E Coyote flying into a cliff"
+9,Create giant sling,Planned,Roadrunner,Low,1 day,,
+10,Acquire nitroglycerin,In progress,Wile E Coyote,High,3 days,2 days,"Acme shipment delayed, searching for alternative sources"
+11,Create anvil,Planned,Wile E Coyote,Low,1 day,,
+12,Create fake bird seed,In progress,Wile E Coyote,Medium,2 days,1 day,"Roadrunner caught onto the trick and avoided the trap"
+13,Create bird decoy,Completed,Wile E Coyote,Low,1 day,1 day,"Roadrunner fell for the decoy and was captured"
+14,Create booby-trapped balloon,Completed,Wile E Coyote,Medium,2 days,2 days,"Balloon successfully trapped Roadrunner but popped before he could be caught"
+15,Create dynamite-powered unicycle,In progress,Wile E Coyote,High,4 days,3 days,"Prototype exploded during testing, redesigning"
+16,Create giant rubber band,Planned,Roadrunner,Low,1 day,,
+17,Create fake road,Completed,Wile E Coyote,Medium,2 days,2 days,"Roadrunner successfully fell for the trap and ran into the painted wall"
+18,Create giant scissors,Planned,Wile E Coyote,Low,1 day,,
+19,Create fake bat suit,In progress,Roadrunner,High,3 days,2 days,"Suit design is proving difficult to create, considering alternative options"
+20,Acquire rocket-powered unicycle,Planned,Wile E Coyote,Low,1 day,,
+21,Create fake earthquake machine,Planned,Wile E Coyote,Medium,2 days,,
+22,Create giant flypaper,Completed,Wile E Coyote,High,3 days,3 days,"Roadrunner avoided the trap, but several other objects and animals were caught"
+23,Create fake train tracks,Completed,Wile E Coyote,High,2 days,2 days,"Roadrunner successfully followed the fake tracks and ran into the painted tunnel"
+24,Acquire rocket-powered pogo stick,Planned,Wile E Coyote,Low,1 day,,
+25,Create giant catapult,In progress,Roadrunner,High,4 days
+26, Create a giant rubber ball, Planned, Wile E Coyote, Low, 2 days,,
+27, Create a fake phone booth, Completed, Wile E Coyote, Medium, 1 day, 1 day, "Roadrunner fell for the trick and ran into the painted wall"
+28, Acquire rocket-powered shoes, Planned, Wile E Coyote, Low, 1 day,,
+29, Create a fake target, Completed, Wile E Coyote, High, 2 days, 2 days, "Roadrunner was successfully lured into the trap"
+30, Create a giant fan, In progress, Roadrunner, Medium, 3 days,,
+31, Create a giant fly swatter, Planned, Wile E Coyote, Low, 1 day,,
+32, Acquire a giant egg, In progress, Roadrunner, High, 4 days, 2 days, "Difficulty finding an egg large enough for the trap"
+33, Create a fake landscape, Completed, Wile E Coyote, Medium, 2 days, 2 days, "Roadrunner was successfully lured into the trap"
+34, Create a giant mouse trap, In progress, Wile E Coyote, High, 3 days,,
+35, Acquire a giant paper clip, Planned, Wile E Coyote, Low, 1 day,,
+36, Create a fake cloud, In progress, Roadrunner, Medium, 2 days,,
+37, Create a giant glue trap, Completed, Wile E Coyote, High, 3 days, 3 days, "Roadrunner avoided the trap, but several other objects and animals were caught"
+38, Create a giant ice block, In progress, Roadrunner, High, 4 days,,
+39, Create a fake signpost, Completed, Wile E Coyote, Medium, 1 day, 1 day, "Roadrunner fell for the trick and ran into the painted wall"
+40, Acquire a rocket-powered skateboard, Planned, Wile E Coyote, Low, 1 day,,
+41, Create a giant mousetrap, In progress, Wile E Coyote, High, 3 days,,
+42, Create a fake tree, Completed, Wile E Coyote, Medium, 2 days, 2 days, "Roadrunner was successfully lured into the trap"
+43, Acquire a giant rubber band ball, Planned, Wile E Coyote, Low, 1 day,,
+44, Create a giant slinky, In progress, Roadrunner, Medium, 3 days,,
+45, Create a fake stoplight, Completed, Wile E Coyote, Medium, 1 day, 1 day, "Roadrunner fell for the trick and ran into the painted wall"
+46, Acquire a giant bowling ball, In progress, Wile E Coyote, High, 3 days,,
+47, Create a giant mouse hole, In progress, Roadrunner, Medium, 2 days,,
+48, Create a fake bus stop, Completed, Wile E Coyote, Medium, 1 day, 1 day, "Roadrunner fell for the trick and ran into the painted wall"
+49, Acquire a rocket-powered wheelchair, Planned, Wile E Coyote, Low, 1 day,,
+50, Create a giant slingshot, In progress, Roadrunner, High, 4 days,,
+1051, Create a fake wall, Completed, Wile E Coyote, Medium, 1 day, 1 day, "Roadrunner fell for the trick and ran into the painted wall"
+1052, Acquire a giant paper airplane, Planned, Wile E Coyote,
+51, Create a fake wall, Completed, Wile E Coyote, Medium, 1 day, 1 day, "Roadrunner fell for the trick and ran into the painted wall"
+52, Acquire a giant paper airplane, Planned, Wile E Coyote, Low, 1 day,,
+53, Create a giant carrot, Completed, Bugs Bunny, High, 2 days, 2 days, "Successfully tricked Elmer Fudd into believing he was a giant carrot"
+54, Acquire a giant anvil, In progress, Yosemite Sam, High, 3 days,,
+55, Create a fake treasure map, Completed, Porky Pig, Medium, 2 days, 2 days, "Successfully tricked Daffy Duck into searching for treasure in the wrong location"
+56, Create a giant magnet, In progress, Wile E Coyote, High, 3 days,,
+57, Create a fake fortune teller's booth, Completed, Bugs Bunny, Medium, 1 day, 1 day, "Successfully tricked Marvin the Martian into believing he had destroyed the Earth"
+58, Acquire a giant cactus, In progress, Yosemite Sam, High, 4 days,,
+59, Create a giant fly swatter, Planned, Bugs Bunny, Low, 1 day,,
+60, Create a fake door, Completed, Porky Pig, Medium, 2 days, 2 days, "Successfully tricked Sylvester into running into the painted wall"
+61, Create a giant rubber band, In progress, Wile E Coyote, High, 3 days,,
+62, Create a fake treasure chest, Completed, Bugs Bunny, Medium, 2 days, 2 days, "Successfully tricked Elmer Fudd into giving up his hunting rifle"
+63, Acquire a giant horseshoe, In progress, Yosemite Sam, High, 4 days,,
+64, Create a giant water balloon, Planned, Bugs Bunny, Low, 1 day,,
+65, Create a fake time machine, Completed, Porky Pig, High, 3 days, 3 days, "Successfully tricked Daffy Duck into believing he had traveled back in time"
+66, Create a giant slingshot, In progress, Wile E Coyote, High, 3 days,,
+67, Create a fake painting, Completed, Bugs Bunny, Medium, 1 day, 1 day, "Successfully tricked Elmer Fudd into believing he had caught Bugs Bunny"
+68, Acquire a giant boulder, In progress, Yosemite Sam, High, 4 days,,
+69, Create a giant mousetrap, Planned, Bugs Bunny, Low, 1 day,,
+70, Create a fake UFO, Completed, Porky Pig, Medium, 2 days, 2 days, "Successfully tricked Marvin the Martian into believing he had returned to Mars"
