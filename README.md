@@ -8,6 +8,8 @@ A Discord taskbot that uses GitHub tasks as a backing store.
     DISCORD_TOKEN=discord-token
     GITHUB_TOKEN=your-github-token
 
+See [gspread auth docs](https://docs.gspread.org/en/latest/oauth2.html) on setting up the Google access key.
+
 
 ## v0.1
 The prototype is working, now to add the bones: simple commands for adding, editing and checking on open tickets. First step is simple use cases.
@@ -61,7 +63,9 @@ Just noticed the way I was weaving this doc together, I wasn't leaving myself ve
 Underlying bot is working with existing (feature-incomplete) expectations. Next step is "update" function, which will require managing the file contents for a full file re-write (the only option, I think, unless the CSV libs provide one). Simple testing in place to keep me from tracking down syntax error via the full discord bot deployment, but dpytest isn't working yet.
 
 Rough sketch:
-- Get update() and a few more tests working
+- Get update() and a few more tests working - DONE
+- Add google sheet backing - DONE, except for add() - leaving the ID issue outstanding
+- SheetBacking add() and supporting test case.
 - Add task bot commands!
 - Figure out cogs in discord.py
 - get dpytest running
