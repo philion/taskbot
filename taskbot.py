@@ -54,7 +54,7 @@ class TaskCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.fields = bot.store.fieldnames
-        self.mapper = pm.ParamMapper(self.fields)
+        self.mapper = pm.ParamMapper()
         log.debug(f"init TaskCog with {self.fields}")
 
     @commands.Cog.listener()
@@ -64,8 +64,15 @@ class TaskCog(commands.Cog):
             await channel.send(f'Welcome {member.mention}.')
 
     @commands.command()
-    async def add(self, ctx, *, member: discord.Member = None):
-        pass
+    async def add(self, ctx, *, params: pm.ParamMapper()):
+        none_value = params.pop('none', None)
+        if none_value:
+            # in this case, assume default key 'title'
+            params['title'] = none_value
+            # TODO there needs to be a general way to handle the tag-less defaults
+
+        id = self.bot.store.add(params)
+        await ctx.send(f'Added id={id} with {params}')
     
     @commands.command()
     async def edit(self, ctx, *, member: discord.Member = None):
@@ -76,20 +83,12 @@ class TaskCog(commands.Cog):
         params = self.mapper.parse(arg) # a string with everything
         result = self.bot.store.find(params)
 
+        table = self.render_table(result)
+        await ctx.send(table)
 
-        table = tabulate(result, headers=self.fields)
-        await ctx.send("```\n" + table + "\n```")
-    
-
-    @commands.command()
-    async def hello(self, ctx, *, member: discord.Member = None):
-        """Says hello"""
-        member = member or ctx.author
-        if self._last_member is None or self._last_member.id != member.id:
-            await ctx.send(f'Hello {member.name}~')
-        else:
-            await ctx.send(f'Hello {member.name}... This feels familiar.')
-        self._last_member = member
+    def render_table(self, dataset):
+        # TODO table headers and formatting
+        return f"```\n{tabulate(dataset)}\n```" 
 
 
 # main()

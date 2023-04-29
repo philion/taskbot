@@ -193,11 +193,16 @@ Just noticed the way I was weaving this doc together, I wasn't leaving myself ve
 
 Underlying bot is working with existing (feature-incomplete) expectations. Next step is "update" function, which will require managing the file contents for a full file re-write (the only option, I think, unless the CSV libs provide one). Simple testing in place to keep me from tracking down syntax error via the full discord bot deployment, but dpytest isn't working yet.
 
+----
+
+I've gotten add and list working in taskbot, and testing has been tedious, so it's once again time to poke on dpytest and test without the discord client. Perhaps it will be good to walk thru the debugger to get that working end-to-end.
+
 Rough sketch:
 - Get update() and a few more tests working - DONE
 - Add google sheet backing - DONE, except for add() - DONE!
 - SheetBacking add() and supporting test case. - DONE!
 - Research and recommend taskbot command, generate TaskManager UX and contract
-- Add task bot commands!
-- Figure out cogs in discord.py - working
-- get dpytest running
+- Add task bot commands! - list and add working
+- Figure out cogs in discord.py - DONE! TaskCog running
+- get dpytest running - DO THIS!!!
+- github actions to run build on master checking, generate a good profile and coverage report using pytest
