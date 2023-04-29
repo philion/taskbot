@@ -23,8 +23,8 @@ class SheetsBackingStore:
 
     def find_id(self, id):
         col = self.field_map['id']
-        log.debug(f"column for id: {col}")
-        cell = self.sheet.find(id, in_column=col)
+        log.debug(f"looking for {id} in col={col}")
+        cell = self.sheet.find(str(id), in_column=col) # rampant str() - find() failed for int(id)
         log.debug(f"found row: {cell.row}")
         return cell
 
@@ -67,12 +67,41 @@ class SheetsBackingStore:
         # update the values
         for name, value in params.items():
             col = self.field_map[name]
-            log.debug(f"Updating a value: {id}, {name}/{col} -> {value}")
+            #log.debug(f"Updating a value: {id}, {name}/{col} -> {value}")
 
             self.sheet.update_cell(cell.row, col, value)
 
 
+    def gen_id(self):
+        # just get the highest value in 'id' col and add 1.
+        col = self.field_map['id']
+        vals = self.sheet.col_values(col)
+        vals = vals[1:] # strip the 1st value, the header
+        return int(max(vals)) + 1
+
     def add(self, params):
-        with open(self.filename, 'a') as csvfile:
-            writer = csv.DictWriter(csvfile, self.fieldnames)
-            writer.writerow(params)
+        # generate a new ID
+        if 'id' not in params:
+            params['id'] = self.gen_id()
+
+        log.debug(f"add:params={params}")
+
+        # create row value list
+        row = [None] * (len(self.field_map.items()) + 1)
+
+        for field, value in params.items():
+            col = self.field_map.get(field)
+            if col:
+                row[col] = value
+                #log.debug(f"add: {col}/{field} = {params}")
+            else:
+                log.warn(f'Unknown column name: {field}')
+
+        # the list is too long currently, due to the 1-based index for sheets
+        row = row[1:]
+
+        # create a new row
+        log.debug(f"Appending row, id={row[0]}: {row}")
+        self.sheet.append_row(row)
+
+        return params['id']

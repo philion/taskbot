@@ -64,8 +64,8 @@ Underlying bot is working with existing (feature-incomplete) expectations. Next 
 
 Rough sketch:
 - Get update() and a few more tests working - DONE
-- Add google sheet backing - DONE, except for add() - leaving the ID issue outstanding
-- SheetBacking add() and supporting test case.
+- Add google sheet backing - DONE, except for add() - DONE!
+- SheetBacking add() and supporting test case. - DONE!
 - Add task bot commands!
 - Figure out cogs in discord.py
 - get dpytest running
