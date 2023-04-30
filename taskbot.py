@@ -8,23 +8,29 @@ import asyncio
 from dotenv import load_dotenv
 from github import Github
 import FileBackingStore as store
-import ParamMapper as pm
 
 from dotenv import load_dotenv
 from discord.ext import commands
-from tabulate import tabulate
 
 from pathlib import Path
 
 
 # setup logging
+discord.utils.setup_logging(level=logging.DEBUG)
 log = logging.getLogger(Path(__file__).stem)
-
+#log.setLevel(level=logging.DEBUG)
 
 # TaskBot - encapsulate the discord bot operations
 class TaskBot(commands.Bot):
     def __init__(self, store): # fixme add typing
-        log.debug(f"init TaskBot with {store.__class__}")
+        intents = discord.Intents.default()
+        intents.message_content = True
+        super().__init__(
+            command_prefix='$', 
+            intents=intents,
+            description='acmrckt taskbot',
+        )
+        
         self.store = store
 
         # load the secrets
@@ -33,69 +39,31 @@ class TaskBot(commands.Bot):
         # setup the bot
         intents = discord.Intents.default()
         intents.message_content = True
-        super().__init__(
-            command_prefix='$', 
-            intents=intents,
-            description='acmrckt taskbot',
-        )
-    
-    async def start(self):
-        log.debug("starting")
 
-        # register cogs
-        await self.add_cog(TaskCog(self))
+        log.debug(f"done init TaskBot with {store.__class__}")
 
-        # start
-        await super().start(os.getenv("DISCORD_TOKEN"))
+    # run wrapper adds token
+    def run(self):
+        log.debug("running")
+        super().run(os.getenv("DISCORD_TOKEN"))
 
+    async def on_ready(self):
+        # load the extensions
+        loadconfig = ["TaskCog"]
+        for cog in loadconfig:
+            try:
+                await self.load_extension(cog)
+            except Exception as ex:
+                log.warning(f'Couldn\'t load cog {cog}: {ex}')
+                
+        log.info(f'TaskBot ready, Discord v{discord.__version__}')
+        AppInfo = await self.application_info()
+        log.info(f'Owner: {AppInfo.owner}')
+        
 
-# TaskCog - the task-related commands
-class TaskCog(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-        self.fields = bot.store.fieldnames
-        self.mapper = pm.ParamMapper()
-        log.debug(f"init TaskCog with {self.fields}")
+def main():
+    bot = TaskBot(store.FileBackingStore("test.csv")) # test backing store
+    bot.run()
 
-    @commands.Cog.listener()
-    async def on_member_join(self, member):
-        channel = member.guild.system_channel
-        if channel is not None:
-            await channel.send(f'Welcome {member.mention}.')
-
-    @commands.command()
-    async def add(self, ctx, *, params: pm.ParamMapper()):
-        none_value = params.pop('none', None)
-        if none_value:
-            # in this case, assume default key 'title'
-            params['title'] = none_value
-            # TODO there needs to be a general way to handle the tag-less defaults
-
-        id = self.bot.store.add(params)
-        await ctx.send(f'Added id={id} with {params}')
-    
-    @commands.command()
-    async def edit(self, ctx, *, member: discord.Member = None):
-        pass
-
-    @commands.command()
-    async def list(self, ctx, arg = ''):
-        params = self.mapper.parse(arg) # a string with everything
-        result = self.bot.store.find(params)
-
-        table = self.render_table(result)
-        await ctx.send(table)
-
-    def render_table(self, dataset):
-        # TODO table headers and formatting
-        return f"```\n{tabulate(dataset)}\n```" 
-
-
-# main()
-async def main():
-    storage = store.FileBackingStore("test.csv")
-    bot = TaskBot(storage)
-    async with bot:
-        await bot.start()
-
-asyncio.run(main())
+if __name__ == '__main__':
+    main()

@@ -199,6 +199,10 @@ Underlying bot is working with existing (feature-incomplete) expectations. Next 
 
 I've gotten add and list working in taskbot, and testing has been tedious, so it's once again time to poke on dpytest and test without the discord client. Perhaps it will be good to walk thru the debugger to get that working end-to-end.
 
+Still no dpytest love. The sample tests work, but the special async hooks that are making taksbot run for real are getting in the way.
+
+Time to implement the TaskManager Protocol and test against that.
+
 Rough sketch:
 - Get update() and a few more tests working - DONE
 - Add google sheet backing - DONE, except for add() - DONE!
