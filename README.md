@@ -3,19 +3,33 @@ A Discord taskbot that uses GitHub tasks as a backing store.
 
 ## config
 
-**`.env`** - Contains secrets loaded from an ENV file. Requires `DISCORD_TOKEN` set with a valid Discord app token:
+`taskbot` configuration is stores in `$HOME/.config/taskbot/config.json`. This seperates the working code (which is regularly checked in) from the sensitive configuration code which usually contains secret keys (and too ofter gets uploaded to github).
 
-    DISCORD_TOKEN=discord-token
-    GITHUB_TOKEN=your-github-token
+That file looks like:
+```
+{
+  "prefix": "$",
+  "token": "DISCORD TOKEN",
+  "permissions": "YOUR_BOT_PERMISSIONS_HERE",
+  "application_id": "YOUR_APPLICATION_ID_HERE",
+}
+```
+and has the following fields:
+* `prefix`: character prefix for taskbot commands
+* `token` : the Discord token. See [discord.py docs](https://discordpy.readthedocs.io/en/stable/discord.html) to setup a Discord developer token.
+* `permissions` : YOUR_BOT_PERMISSIONS
+* `application_id` : YOUR_APPLICATION_ID
 
 See [gspread auth docs](https://docs.gspread.org/en/latest/oauth2.html) on setting up the Google access key.
-#TODO Add link to discord.py setup, clean up impl. config details for new config.
-#TODO Move config to ~/.config/taskbot/config.json, keep away from 
-#TODO Flag to supress integration tests? - seperate file, manage in makefile
 
 
 ## v0.2
 Got the new testable framework ported over and running. `make test` is your friend.
+
+#TODO Add link to discord.py setup, clean up impl. config details for new config.
+#TODO Move config to ~/.config/taskbot/config.json, keep away from 
+#TODO Flag to supress integration tests? - seperate file, manage in makefile
+
 
 ## v0.1
 The prototype is working, now to add the bones: simple commands for adding, editing and checking on open tickets. First step is simple use cases.
@@ -232,3 +246,5 @@ Rough sketch:
 - generic discord wrapper for any CLI?
 - containerize the bot
 - pytest reports, and how are they stored in GH actions?
+- better formatting on the results, length<2000, cols to display, etc.
+- separate unit from intergration tests.

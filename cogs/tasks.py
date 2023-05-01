@@ -101,6 +101,7 @@ class TaskCog(commands.Cog):
     #async def list(self, ctx, arg):
     async def list(self, ctx, *, params: ParamMapper() = {}):
         #params = self.mapper.parse(arg) # a string with everything
+        # need to limit num of results. top 20 or something.
         log.debug(f"list {params}")
 
         result = self.manager.list(params)
