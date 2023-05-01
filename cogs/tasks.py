@@ -4,10 +4,11 @@ from discord.ext import commands
 from tabulate import tabulate
 import logging
 import re
-from github import Github
+from github import Github, GithubObject
 import os
 import sys
 import json
+
 
 log = logging.getLogger(__name__)
 
@@ -178,7 +179,17 @@ class GitHubIssueManager(TaskManager):
             params['title'] = none_value
             # TODO there needs to be a general way to handle the tag-less defaults
 
-        issue = self.repo.create_issue(params)
+        labels = GithubObject.NotSet
+        label = params.get('label')
+        if label:
+            labels = [label]
+
+        issue = self.repo.create_issue(
+            title=params['title'],
+            body=params.get('body', GithubObject.NotSet),
+            assignee=params.get('assignee', GithubObject.NotSet),
+            labels=labels,
+        )
         log.debug(f"created issue: {issue}")
         
         return issue.number
@@ -205,6 +216,8 @@ class GitHubIssueManager(TaskManager):
         response = []
         for issue in issues:
             response.append(issue.__dict__) # better way?
+
+        log.debug(f"resp={response}")
 
         return response
     
