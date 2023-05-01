@@ -207,6 +207,10 @@ Got that async hook working with taskbot, after a complete refactor and adding t
 
 Back to TaskManager and hand testing in discord client.
 
+TaskCog/taskbot is working with dpytest, running inside a standard discord bot template. Will port everything over to that project in daylight.
+
+Once ported (readme, tests, other code), github actions for standard build would be nice (make report generates report to?)
+
 Rough sketch:
 - Get update() and a few more tests working - DONE
 - Add google sheet backing - DONE, except for add() - DONE!
@@ -214,8 +218,9 @@ Rough sketch:
 - Research and recommend taskbot command, generate TaskManager UX and contract
 - Add task bot commands! - list and add working
 - Figure out cogs in discord.py - DONE! TaskCog running
-- get dpytest running - DO THIS!!!
+- get dpytest running - DONE
 - tasksh - get a simple shell running to eval commands, and capture inputs for testing.
 - github actions to run build on master checking, generate a good profile and coverage report using pytest
 - think about: discord wrapper for any of the Task Manager project. really just a question of backing store.
 - generic discord wrapper for any CLI?
+- containerize the bot
