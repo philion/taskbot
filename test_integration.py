@@ -11,15 +11,16 @@ import random
 import datetime
 
 # google sheets
-def get_sheets_store():
+#class test_SheetsBackingStore():
+@pytest.fixture
+def tasks():
     try:
         store = SheetsBackingStore("Taskbot Test Sheet")
         return TaskManager(store) # id handling was moved to task manager
     except Exception as ex:
         pytest.skip(f"Cannot load config: {ex}")
 
-def test__sheet_add():
-    tasks = get_sheets_store()
+def test_add(tasks):
     row = {
         'title': f'Test title {random.randint(42, 9999)}',
         'project': random.choice(['acme','rocket','yoyo','skateboard']),
@@ -36,22 +37,17 @@ def test__sheet_add():
     for name, value in row.items():
         assert str(testrow[name]) == str(value)
 
-def test_fieldnames():
-    tasks = get_sheets_store()
+def test_fieldnames(tasks):
     assert tasks.fieldnames() == ['id', 'title', 'project', 'status', 'assigned', 'updated', 'notes']
 
-def test_value():
-    tasks = get_sheets_store()
+def test_value(tasks):
     assert tasks.get('4')['project'] == 'yoyo'
     assert tasks.get('1')['assigned'] == 'philion'
 
-def test_sheets_list():
-    tasks = get_sheets_store()
+def test_sheets_list(tasks):
     assert tasks.list({'status': 'jolly'})[0]['id'] == 4
 
-def test_sheets_edit():
-    tasks = get_sheets_store()
-
+def test_sheets_edit(tasks):
     # confirm status=jolly
     assert tasks.get('4')['status'] == 'jolly'
 
