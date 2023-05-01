@@ -5,6 +5,8 @@ import os
 import random
 import datetime
 
+import TaskManager as tm
+
 log = logging.getLogger(os.path.basename(__file__))
 
 class TestFileBackingStore:
@@ -41,6 +43,7 @@ class TestSheetsBackingStore:
         
     def test_add(self):
         store = SheetsBackingStore.SheetsBackingStore("Taskbot Test Sheet")
+        tasks = tm.TaskManager(store) # id handling was moved to task manager
 
         row = {
             'title': f'Test title {random.randint(42, 9999)}',
@@ -50,15 +53,14 @@ class TestSheetsBackingStore:
             'updated': datetime.datetime.now().isoformat(sep=' ', timespec='seconds')
         }
 
-        id = store.add(row)
+        id = tasks.add(row)
+        assert id is not None, "id is missing from add() response"
 
         testrow = store.row(id)
         log.debug(f"{id} - {testrow}")
 
         for name, value in row.items():
             assert str(testrow[name]) == str(value)
-
-        #assert testrow.items() <= row.items()
 
     def test_fieldnames(self):
         store = SheetsBackingStore.SheetsBackingStore("Taskbot Test Sheet")

@@ -16,7 +16,12 @@ class SheetsBackingStore:
         for i, field in enumerate(self.fieldnames):
             self.field_map[field] = i + 1
 
+    def count(self):
+        # just get the number of values in id col
+        col = self.field_map['id']
+        return len(self.sheet.col_values(col))
 
+        
     # get all the values as dict[]
     def values(self):
         return self.sheet.get_all_records()
@@ -25,22 +30,26 @@ class SheetsBackingStore:
         col = self.field_map['id']
         log.debug(f"looking for {id} in col={col}")
         cell = self.sheet.find(str(id), in_column=col) # rampant str() - find() failed for int(id)
-        log.debug(f"found row: {cell.row}")
-        return cell
+        if cell:
+            log.debug(f"found row: {cell.row}")
+            return cell
+        else:
+            log.debug(f"Couldn't: id={id} in col={col}")
 
     def row(self, id):
         cell = self.find_id(id)
-        values = self.sheet.row_values(cell.row)
-        # map columns items to names
-        row = {}            
-        #log.debug(f'{values}')
+        if cell:
+            values = self.sheet.row_values(cell.row)
+            # map columns items to names
+            row = {}            
+            #log.debug(f'{values}')
 
-        for col, value in enumerate(values):
-            name = self.fieldnames[col]
-            #log.debug(f'{name}')
-            row[name] = value
+            for col, value in enumerate(values):
+                name = self.fieldnames[col]
+                #log.debug(f'{name}')
+                row[name] = value
 
-        return row
+            return row
 
     def get(self, id, field):
         found = self.row(id)
@@ -72,23 +81,7 @@ class SheetsBackingStore:
             self.sheet.update_cell(cell.row, col, value)
 
 
-    def gen_id(self):
-        # just get the highest value in 'id' col and add 1.
-        col = self.field_map['id']
-        num_rows = len(self.sheet.col_values(col))
-
-        # note: num_rows contains the length including the header row.
-        # -1 to remove header, +1 to add new row
-        id = num_rows
-
-        # there's intended flexibility ar
-        return id
-
     def add(self, params):
-        # generate a new ID
-        if 'id' not in params:
-            params['id'] = self.gen_id()
-
         log.debug(f"add:params={params}")
 
         # create row value list

@@ -203,6 +203,10 @@ Still no dpytest love. The sample tests work, but the special async hooks that a
 
 Time to implement the TaskManager Protocol and test against that.
 
+Got that async hook working with taskbot, after a complete refactor and adding the correct intents! But it's still not reliable as I test.
+
+Back to TaskManager and hand testing in discord client.
+
 Rough sketch:
 - Get update() and a few more tests working - DONE
 - Add google sheet backing - DONE, except for add() - DONE!

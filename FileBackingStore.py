@@ -9,13 +9,18 @@ class FileBackingStore:
         self.filename = filename
         self.fieldnames = self._get_fieldnames()
 
+
     # get the column titles, as per csv.DictReader
     def _get_fieldnames(self):
         with open(self.filename) as csvfile:
             return csv.DictReader(csvfile).fieldnames
         
-    #def fieldnames(self):
-    #    return self.fieldnames
+
+    # the number of records stored
+    def count(self):
+        with open(self.filename) as f:
+            return sum(1 for line in f)
+
 
     # get all the values as dict[]
     def values(self):
@@ -28,16 +33,19 @@ class FileBackingStore:
             # TODO return the iterator from the reader? or a seqproxy?
             return df
 
+
     def row(self, id):
         # dumb search
         for row in self.values():
             if row['id'] == id:
                 return row
 
+
     def get(self, id, field):
         found = self.row(id)
         if found:
             return found[field]
+
 
     # return any fields that match all suppied params (they are "and"ed)
     def find(self, fields):
@@ -74,6 +82,7 @@ class FileBackingStore:
         self.write(rows)
 
         log.debug(f"Updated a value: id={id}, {params}")
+
 
     def write(self, rows):
         with open(self.filename, 'w', newline='') as csvfile:

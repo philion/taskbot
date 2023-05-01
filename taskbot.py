@@ -23,14 +23,8 @@ log = logging.getLogger(Path(__file__).stem)
 # TaskBot - encapsulate the discord bot operations
 class TaskBot(commands.Bot):
     def __init__(self, store): # fixme add typing
-        intents = discord.Intents.default()
-        intents.message_content = True
-        super().__init__(
-            command_prefix='$', 
-            intents=intents,
-            description='acmrckt taskbot',
-        )
-        
+        log.debug(f"init TaskBot with {store.__class__}")
+
         self.store = store
 
         # load the secrets
@@ -39,8 +33,13 @@ class TaskBot(commands.Bot):
         # setup the bot
         intents = discord.Intents.default()
         intents.message_content = True
-
-        log.debug(f"done init TaskBot with {store.__class__}")
+        intents.members = True
+        
+        super().__init__(
+            command_prefix='$', 
+            intents=intents,
+            description='acmrckt taskbot',
+        )
 
     # run wrapper adds token
     def run(self):
@@ -60,10 +59,11 @@ class TaskBot(commands.Bot):
         AppInfo = await self.application_info()
         log.info(f'Owner: {AppInfo.owner}')
         
+def test_bot():
+    return TaskBot(store.FileBackingStore("test.csv")) # test store
 
 def main():
-    bot = TaskBot(store.FileBackingStore("test.csv")) # test backing store
-    bot.run()
+    test_bot().run()
 
 if __name__ == '__main__':
     main()
