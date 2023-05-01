@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 """
 taskbot - bootstrap and runner for the taksbot Discord bot
 based on https://github.com/kkrypt0nn/Python-Discord-Bot-Template/

@@ -77,7 +77,7 @@ class TaskCog(commands.Cog):
     def __init__(self, bot, manager):
         self.bot = bot
         self.manager = manager
-        self.fields = bot.store.fieldnames # fixme looks like control coupling
+        self.fields = manager.fieldnames # fixme looks like control coupling
         log.debug(f"init TaskCog with {self.fields}")
 
     @commands.command()
@@ -101,7 +101,7 @@ class TaskCog(commands.Cog):
         #params = self.mapper.parse(arg) # a string with everything
         log.debug(f"list {params}")
 
-        result = self.manager.find(params)
+        result = self.manager.list(params)
 
         table = self.render_table(result)
         await ctx.send(table)

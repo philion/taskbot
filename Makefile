@@ -7,7 +7,7 @@ PIP = $(VENV)/bin/pip
 all: $(VENV)/bin/activate
 
 run: $(VENV)/bin/activate
-	$(PYTHON) bot.py
+	$(PYTHON) taskbot.py
 
 $(VENV)/bin/activate: requirements.txt
 	python3.10 -m venv $(VENV)
@@ -21,4 +21,5 @@ clean:
 	rm -rf __pycache__
 	rm -rf $(VENV)
 	rm -f discord.log
+	rm -f dpytest_*.dat
 	find . -type f -name ‘*.pyc’ -delete
