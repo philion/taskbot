@@ -4,10 +4,12 @@ VENV = .venv
 PYTHON = $(VENV)/bin/python3
 PIP = $(VENV)/bin/pip
 
-all: $(VENV)/bin/activate
+all: venv
 
-run: $(VENV)/bin/activate
+run: venv
 	$(PYTHON) taskbot.py
+
+venv: $(VENV)/bin/activate
 
 $(VENV)/bin/activate: requirements.txt
 	python3.10 -m venv $(VENV)

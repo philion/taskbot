@@ -22,14 +22,23 @@ and has the following fields:
 
 See [gspread auth docs](https://docs.gspread.org/en/latest/oauth2.html) on setting up the Google access key.
 
+## running
+
+Once config is done, `make` is used for everthing else:
+
+* `make test` - run the unit tests
+* `make integration` - run the integration tests
+* `make run` - run the bot locally
+* `make venv` - run pip install to build the python environment
 
 ## v0.2
 Got the new testable framework ported over and running. `make test` is your friend.
 
-Add link to discord.py setup, clean up config initialization details for new config location.
+Added link to discord.py setup, clean up config initialization details for new config location.
 Moved config to ~/.config/taskbot/config.json, keep away from checkins.
+Refactored config handling and logging.
+Separated unit tests from integration.
 
-#TODO Flag to supress integration tests? - seperate file, manage in makefile
 
 
 ## v0.1
