@@ -20,6 +20,12 @@ from discord.ext.commands import Bot, Context
 
 import exceptions
 
+# logging
+discord.utils.setup_logging(level=logging.INFO) # configure from config
+log = logging.getLogger("taskbot")
+                            
+
+# TODO clean up init code
 if not os.path.isfile(f"{os.path.realpath(os.path.dirname(__file__))}/config.json"):
     sys.exit("'config.json' not found! Please add it and try again.")
 else:
@@ -77,7 +83,7 @@ bot = Bot(
 
 # Setup both of the loggers
 
-
+# TODO refactor logging init
 class LoggingFormatter(logging.Formatter):
     # Colors
     black = "\x1b[30m"
@@ -100,7 +106,7 @@ class LoggingFormatter(logging.Formatter):
 
     def format(self, record):
         log_color = self.COLORS[record.levelno]
-        format = "(black){asctime}(reset) (levelcolor){levelname:<8}(reset) (green){name}(reset) {message}"
+        format = "(black){asctime}(reset) (levelcolor){levelname:<5}(reset) (green){name:>18}(reset) {message}"
         format = format.replace("(black)", self.black + self.bold)
         format = format.replace("(reset)", self.reset)
         format = format.replace("(levelcolor)", log_color)
@@ -109,23 +115,25 @@ class LoggingFormatter(logging.Formatter):
         return formatter.format(record)
 
 
-logger = logging.getLogger("discord_bot")
-logger.setLevel(logging.INFO)
-
 # Console handler
-console_handler = logging.StreamHandler()
-console_handler.setFormatter(LoggingFormatter())
-# File handler
-file_handler = logging.FileHandler(filename="discord.log", encoding="utf-8", mode="w")
-file_handler_formatter = logging.Formatter(
-    "[{asctime}] [{levelname:<8}] {name}: {message}", "%Y-%m-%d %H:%M:%S", style="{"
-)
-file_handler.setFormatter(file_handler_formatter)
+#logging.basicConfig(level=logging.DEBUG)
+#console_handler = logging.StreamHandler()
+#console_handler.setFormatter(LoggingFormatter())
 
-# Add the handlers
-logger.addHandler(console_handler)
-logger.addHandler(file_handler)
-bot.logger = logger
+#logging.getLogger().addHandler(console_handler)
+
+# File handler
+#file_handler = logging.FileHandler(filename="discord.log", encoding="utf-8", mode="w")
+#file_handler_formatter = logging.Formatter(
+#    "[{asctime}] [{levelname:<8}] {name}: {message}", "%Y-%m-%d %H:%M:%S", style="{"
+#)
+#file_handler.setFormatter(file_handler_formatter)
+#logger.addHandler(file_handler)
+
+#logger = logging.getLogger("taskbot")
+#logger.setLevel(logging.DEBUG) # TODO - better way to manage debug flag for test
+
+bot.logger = log
 
 
 async def init_db():

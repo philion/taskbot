@@ -231,3 +231,4 @@ Rough sketch:
 - think about: discord wrapper for any of the Task Manager project. really just a question of backing store.
 - generic discord wrapper for any CLI?
 - containerize the bot
+- pytest reports, and how are they stored in GH actions?

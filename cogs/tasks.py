@@ -5,10 +5,12 @@ from tabulate import tabulate
 import logging
 import re
 
-log = logging.getLogger("tasks")
+log = logging.getLogger(__name__)
+
 
 async def setup(bot):
-    store = FileBackingStore("test.csv")
+    #store = FileBackingStore("test.csv")
+    store = SheetsBackingStore("Taskbot Test Sheet") # FIXME Move to config
     manager = TaskManager(store)
     await bot.add_cog(TaskCog(bot, manager))
 
@@ -77,8 +79,8 @@ class TaskCog(commands.Cog):
     def __init__(self, bot, manager):
         self.bot = bot
         self.manager = manager
-        self.fields = manager.fieldnames # fixme looks like control coupling
-        log.debug(f"init TaskCog with {self.fields}")
+        self.fields = manager.fieldnames()
+        log.info(f"init TaskCog with fields: {self.fields}")
 
     @commands.command()
     async def add(self, ctx, *, params: ParamMapper()):
@@ -102,13 +104,17 @@ class TaskCog(commands.Cog):
         log.debug(f"list {params}")
 
         result = self.manager.list(params)
-
         table = self.render_table(result)
+
         await ctx.send(table)
 
     def render_table(self, dataset):
         # TODO table headers and formatting
-        return f"```\n{tabulate(dataset)}\n```"
+        table = tabulate(dataset)
+        if len(table) > 1990: 
+            log.warn("unable to send large table, truncating") #FIXME - if msg > 2000, fails
+            table = table[:1990]
+        return f"```\n{table}\n```"
     
 class TaskManager():
     def __init__(self, store):
