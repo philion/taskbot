@@ -26,8 +26,9 @@ See [gspread auth docs](https://docs.gspread.org/en/latest/oauth2.html) on setti
 ## v0.2
 Got the new testable framework ported over and running. `make test` is your friend.
 
-#TODO Add link to discord.py setup, clean up impl. config details for new config.
-#TODO Move config to ~/.config/taskbot/config.json, keep away from 
+Add link to discord.py setup, clean up config initialization details for new config location.
+Moved config to ~/.config/taskbot/config.json, keep away from checkins.
+
 #TODO Flag to supress integration tests? - seperate file, manage in makefile
 
 

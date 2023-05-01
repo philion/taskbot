@@ -15,6 +15,9 @@ $(VENV)/bin/activate: requirements.txt
 	$(PIP) install -r requirements.txt
 
 test: $(VENV)/bin/activate
+	$(PYTHON) -m pytest test_general.py
+
+integration:
 	$(PYTHON) -m pytest
 
 clean:

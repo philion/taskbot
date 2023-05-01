@@ -113,7 +113,7 @@ class TaskCog(commands.Cog):
         # TODO table headers and formatting
         table = tabulate(dataset)
         if len(table) > 1990: 
-            log.warn("unable to send large table, truncating") #FIXME - if msg > 2000, fails
+            log.warning("unable to send large table, truncating") #FIXME - if msg > 2000, fails
             table = table[:1990]
         return f"```\n{table}\n```"
     
