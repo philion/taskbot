@@ -40,7 +40,7 @@ Moved config to ~/.config/taskbot/config.json, keep away from checkins.
 Refactored config handling and logging.
 Separated unit tests from integration.
 
-
+Wrote TaskManager based directly on GitHub Issues, and keep running onto client mapping and vlaidation issues. I can't get enough debug logs to firgure out what's failing, and haven't been able to tuen off the screens full of HTTPS trace logs. Time for a big break.
 
 ## v0.1
 The prototype is working, now to add the bones: simple commands for adding, editing and checking on open tickets. First step is simple use cases.
