@@ -9,7 +9,13 @@ A Discord taskbot that uses GitHub tasks as a backing store.
     GITHUB_TOKEN=your-github-token
 
 See [gspread auth docs](https://docs.gspread.org/en/latest/oauth2.html) on setting up the Google access key.
+#TODO Add link to discord.py setup, clean up impl. config details for new config.
+#TODO Move config to ~/.config/taskbot/config.json, keep away from 
+#TODO Flag to supress integration tests? - seperate file, manage in makefile
 
+
+## v0.2
+Got the new testable framework ported over and running. `make test` is your friend.
 
 ## v0.1
 The prototype is working, now to add the bones: simple commands for adding, editing and checking on open tickets. First step is simple use cases.
@@ -219,6 +225,7 @@ Rough sketch:
 - Add task bot commands! - list and add working
 - Figure out cogs in discord.py - DONE! TaskCog running
 - get dpytest running - DONE
+- port template-based bot solution back to taskbot, call it v0.2. - DONE
 - tasksh - get a simple shell running to eval commands, and capture inputs for testing.
 - github actions to run build on master checking, generate a good profile and coverage report using pytest
 - think about: discord wrapper for any of the Task Manager project. really just a question of backing store.

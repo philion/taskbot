@@ -1,9 +1,7 @@
+aiohttp
+aiosqlite
 discord.py
-PyGithub
-python-dotenv
 tabulate
 gspread
 
-# trying to see if I can test without running in the Discord UI
-pytest 
 dpytest
