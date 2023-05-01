@@ -4,6 +4,10 @@ from discord.ext import commands
 from tabulate import tabulate
 import logging
 import re
+from github import Github
+import os
+import sys
+import json
 
 log = logging.getLogger(__name__)
 
@@ -12,6 +16,7 @@ async def setup(bot):
     #store = FileBackingStore("test.csv")
     store = SheetsBackingStore("Taskbot Test Sheet") # FIXME Move to config
     manager = TaskManager(store)
+    #manager = GitHubIssueManager()
     await bot.add_cog(TaskCog(bot, manager))
 
 
@@ -98,9 +103,7 @@ class TaskCog(commands.Cog):
         pass
 
     @commands.command()
-    #async def list(self, ctx, arg):
     async def list(self, ctx, *, params: ParamMapper() = {}):
-        #params = self.mapper.parse(arg) # a string with everything
         # need to limit num of results. top 20 or something.
         log.debug(f"list {params}")
 
@@ -161,6 +164,57 @@ class TaskManager():
     def fieldnames(self):
         return self.store.fieldnames
 
+
+class GitHubIssueManager(TaskManager):
+    def __init__(self):
+        config = init_config()
+        self.github = Github(config['github_token'])
+        self.repo = self.github.get_repo("philion/taskbot")
+    
+    def add(self,  params):
+        none_value = params.pop('none', None)
+        if none_value:
+            # in this case, assume default key 'title'
+            params['title'] = none_value
+            # TODO there needs to be a general way to handle the tag-less defaults
+
+        issue = self.repo.create_issue(params)
+        log.debug(f"created issue: {issue}")
+        
+        return issue.number
+    
+    def edit(self, id, params):
+        issue = self.get(id)
+        if issue:
+            issue.edit(id, params)
+        else:
+            log.warning(f"Issue {id} not found.")
+            # throw error?
+        
+
+    def get(self, id):
+        issue = self.repo.get_issue(id)
+        if issue:
+            return issue.__dict__  # Better way?
+
+    def list(self, params):
+        log.debug(f"### list {params}")
+        # TODO map query params
+        issues = self.repo.get_issues()
+
+        response = []
+        for issue in issues:
+            response.append(issue.__dict__) # better way?
+
+        return response
+    
+    def fieldnames(self):
+        return ["number", "title", "label", "state", "assignee", "updated_at", "body"]
+    
+
+class SQLiteTaskManager(TaskManager):
+    # TODO try to store records in sqlite, already integrated into bot
+    pass
 
 # gspread
 import gspread
@@ -340,3 +394,12 @@ class FileBackingStore:
             writer = csv.DictWriter(csvfile, fieldnames=self.fieldnames)
             writer.writeheader()
             writer.writerows(rows)
+
+# FIXME - this is a copy becuase I still can't figure out relaitve modules in python
+def init_config():
+    configfile = os.path.expanduser("~/.config/taskbot/config.json")
+    if not os.path.isfile(configfile):
+        sys.exit(f"Config file not found: {configfile}. See README for config details.")
+    else:
+        with open(configfile) as file:
+            return json.load(file)

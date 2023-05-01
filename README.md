@@ -30,6 +30,7 @@ Once config is done, `make` is used for everthing else:
 * `make integration` - run the integration tests
 * `make run` - run the bot locally
 * `make venv` - run pip install to build the python environment
+* `make clean` - remove all logging, unneeded files, etc.
 
 ## v0.2
 Got the new testable framework ported over and running. `make test` is your friend.
@@ -255,6 +256,6 @@ Rough sketch:
 - think about: discord wrapper for any of the Task Manager project. really just a question of backing store.
 - generic discord wrapper for any CLI?
 - containerize the bot
-- pytest reports, and how are they stored in GH actions?
+- pytest reports, and how are they stored in GH actions? See: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 - better formatting on the results, length<2000, cols to display, etc.
 - separate unit from intergration tests.

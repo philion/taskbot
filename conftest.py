@@ -69,4 +69,4 @@ async def load_cogs(bot) -> None:
                 log.info(f"Loaded extension '{extension}'")
             except Exception as e:
                 exception = f"{type(e).__name__}: {e}"
-                log.error(f"Failed to load extension {extension}\n{exception}")
+                log.error(f"Failed to load extension {extension}\n{exception}", exc_info=True)

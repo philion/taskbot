@@ -3,5 +3,6 @@ aiosqlite
 discord.py
 tabulate
 gspread
+PyGithub
 
 dpytest
