@@ -1,5 +1,7 @@
 # taskbot
-A Discord taskbot that uses GitHub tasks as a backing store.
+A Discord taskbot to mange tasks in a variety of backing stores.
+
+Status: This is a "working proof of concept", not ready-for-production.
 
 ## config
 
@@ -31,6 +33,13 @@ Once config is done, `make` is used for everthing else:
 * `make run` - run the bot locally
 * `make venv` - run pip install to build the python environment
 * `make clean` - remove all logging, unneeded files, etc.
+
+## v0.3
+TODO: Create an `OSTicketManager` class to integrate directly with OSTicket.
+
+Currently, the design is one-bot-one-backing-store, but that could be backing-store-per-channel.
+
+TODO: Add notification mechanism that runs periodically to return async notification of state changes in the ticket system.
 
 ## v0.2
 Got the new testable framework ported over and running. `make test` is your friend.
