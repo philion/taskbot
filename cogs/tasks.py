@@ -14,10 +14,17 @@ log = logging.getLogger(__name__)
 
 
 async def setup(bot):
-    #store = FileBackingStore("test.csv")
-    store = SheetsBackingStore("Taskbot Test Sheet") # FIXME Move to config
+    config = load_config()
+
+    if config.get('sheets_id'):
+        store = SheetsBackingStore(config['sheets_id'])
+    #elif:
+    #    manager = GitHubIssueManager()
+    else:
+        log.info('loading test data')
+        store = FileBackingStore("test.csv")
+
     manager = TaskManager(store)
-    #manager = GitHubIssueManager()
     await bot.add_cog(TaskCog(bot, manager))
 
 
@@ -168,7 +175,7 @@ class TaskManager():
 
 class GitHubIssueManager(TaskManager):
     def __init__(self):
-        config = init_config()
+        config = load_config()
         self.github = Github(config['github_token'])
         self.repo = self.github.get_repo("philion/taskbot")
     
@@ -232,9 +239,12 @@ class SQLiteTaskManager(TaskManager):
 # gspread
 import gspread
 class SheetsBackingStore:
-    def __init__(self, name: str):
+    def __init__(self, id: str):
         gc = gspread.service_account()
-        sh = gc.open(name)
+        #sh = gc.open(id)
+        sh = gc.open_by_key(id)
+        log.info(f'loaded sheet: {sh.title}')
+
         self.sheet = sh.sheet1
         self.fieldnames = self.sheet.row_values(1)
         self.field_map = {}
@@ -286,13 +296,20 @@ class SheetsBackingStore:
     def find(self, fields):
         result = []
 
-        # more dumb search
+        # see https://docs.gspread.org/en/v5.7.1/api/models/worksheet.html#gspread.worksheet.Worksheet.find
+        # for now, try 'none' as catch all.
+        raw_term = fields.pop('none', None)
+
+        # more dumb search - but google doesn't!
         for row in self.values():
-            for key, value in fields.items():
-                if row[key] != value:
-                    break;
-            else: # all values match!
-                result.append(row)
+            if raw_term:
+                for value in row.values():
+                    if str(value).casefold().find(raw_term):
+                        result.append(row)
+                        break
+            else:
+                for key, value in fields.items():
+                    pass
 
         return result
 
@@ -408,9 +425,10 @@ class FileBackingStore:
             writer.writeheader()
             writer.writerows(rows)
 
-# FIXME - this is a copy becuase I still can't figure out relaitve modules in python
-def init_config():
-    configfile = os.path.expanduser("~/.config/taskbot/config.json")
+
+def load_config(
+        configfile = os.path.expanduser("~/.config/taskbot/config.json")
+    ):
     if not os.path.isfile(configfile):
         sys.exit(f"Config file not found: {configfile}. See README for config details.")
     else:

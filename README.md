@@ -42,10 +42,10 @@ Currently, the design is one-bot-one-backing-store, but that could be backing-st
 TODO: Add notification mechanism that runs periodically to return async notification of state changes in the ticket system.
 
 ## v0.3 (current)
-* Update config to load a specific google sheet by ID.
+* Update config to load a specific google sheet by ID. - DONE
 * Limit reporting to id, title.
 * Limit report to 10 (to save chars)
-* Test `find` 
+* Test `find`. - Hacky work around for lack of Google API. Handles general match.
 * Add link (href, on the ID field) to sheet page? based on response length
 
 ## v0.2

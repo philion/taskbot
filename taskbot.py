@@ -21,7 +21,7 @@ from discord.ext.commands import Bot, Context
 import exceptions
 
 # logging
-discord.utils.setup_logging(level=logging.INFO) # configure from config
+discord.utils.setup_logging(level=logging.DEBUG) # configure from config
 log = logging.getLogger("taskbot")
                            
 def init_config():
