@@ -116,17 +116,50 @@ class TaskCog(commands.Cog):
         log.debug(f"list {params}")
 
         result = self.manager.list(params)
-        table = self.render_table(result)
 
-        await ctx.send(table)
+        tablestr = ''
+        for row in result:
+            id = row['ID']
+            assigned = row['Point Person']
+            title = row['Task']
 
-    def render_table(self, dataset):
-        # TODO table headers and formatting
-        table = tabulate(dataset)
-        if len(table) > 1990: 
+            if len(str(id)) > 0 and len(title) > 0:
+                title = title.replace('\n', '')
+                if len(assigned) == 0:
+                    assigned = 'unassigned'
+                tablestr = f'{tablestr}\n {id}: {title} ({assigned})'
+
+        log.debug(f'result: {tablestr}')
+        
+        if len(tablestr) > 1994: 
             log.warning("unable to send large table, truncating") #FIXME - if msg > 2000, fails
-            table = table[:1990]
-        return f"```\n{table}\n```"
+            tablestr = tablestr[:1994]
+
+        tablestr = '```' + tablestr + '```'
+
+        await ctx.send(tablestr)
+
+    def render_one(self, result):
+        # params contains all the fields, but too many!
+        # so just render the first 2.
+        cols = self.fields[:3]
+        log.debug(f'fields: {cols}')
+
+        table = []
+        for row in result:
+            data = {}
+            for col in cols:
+                data[col] = row[col]
+            table.append(data)
+
+        log.debug(f'result: {table}')
+        tablestr = tabulate(table, headers="firstrow")
+        if len(tablestr) > 1994: 
+            log.warning("unable to send large table, truncating") #FIXME - if msg > 2000, fails
+            tablestr = tablestr[:1994]
+        tablestr = '```' + tablestr + '```'
+        return tablestr
+
     
 class TaskManager():
     def __init__(self, store):
@@ -294,6 +327,10 @@ class SheetsBackingStore:
 
     # return any fields that match all suppied params (they are "and"ed)
     def find(self, fields):
+        if len(fields) == 0:
+            # no params, return everything
+            return self.values()
+
         result = []
 
         # see https://docs.gspread.org/en/v5.7.1/api/models/worksheet.html#gspread.worksheet.Worksheet.find
@@ -304,7 +341,7 @@ class SheetsBackingStore:
         for row in self.values():
             if raw_term:
                 for value in row.values():
-                    if str(value).casefold().find(raw_term):
+                    if str(value).casefold().find(raw_term) >= 0:
                         result.append(row)
                         break
             else:

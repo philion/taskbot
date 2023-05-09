@@ -21,6 +21,7 @@ and has the following fields:
 * `token` : the Discord token. See [discord.py docs](https://discordpy.readthedocs.io/en/stable/discord.html) to setup a Discord developer token.
 * `permissions` : YOUR_BOT_PERMISSIONS
 * `application_id` : YOUR_APPLICATION_ID
+* `sheets_id` : *optional* The ID of the Google sheet to load. 
 
 See [gspread auth docs](https://docs.gspread.org/en/latest/oauth2.html) on setting up the Google access key.
 
@@ -43,8 +44,8 @@ TODO: Add notification mechanism that runs periodically to return async notifica
 
 ## v0.3 (current)
 * Update config to load a specific google sheet by ID. - DONE
-* Limit reporting to id, title.
-* Limit report to 10 (to save chars)
+* Limit reporting to id, title, assigned. - DONE
+* Limit report to 10 (to save chars) SKIP: Fancy tables were getting in the way of readable results. Start simple.
 * Test `find`. - Hacky work around for lack of Google API. Handles general match.
 * Add link (href, on the ID field) to sheet page? based on response length
 
