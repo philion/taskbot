@@ -34,12 +34,19 @@ Once config is done, `make` is used for everthing else:
 * `make venv` - run pip install to build the python environment
 * `make clean` - remove all logging, unneeded files, etc.
 
-## v0.3
+## v0.4 (future)
 TODO: Create an `OSTicketManager` class to integrate directly with OSTicket.
 
 Currently, the design is one-bot-one-backing-store, but that could be backing-store-per-channel.
 
 TODO: Add notification mechanism that runs periodically to return async notification of state changes in the ticket system.
+
+## v0.3 (current)
+* Update config to load a specific google sheet by ID.
+* Limit reporting to id, title.
+* Limit report to 10 (to save chars)
+* Test `find` 
+* Add link (href, on the ID field) to sheet page? based on response length
 
 ## v0.2
 Got the new testable framework ported over and running. `make test` is your friend.
