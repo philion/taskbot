@@ -43,8 +43,8 @@ Plan:
 1. Clone to deployment host (`git clone https://github.com/philion/taskbot`)
 2. Add config file with secrets (as per **`config`** above)
 3. (optional) Add watchdog/autostart to deployment host. Just run in BG for now.
-4. Invite bot to CSN discord.
-5. Verify
+4. Invite bot to CSN discord (https://discordpy.readthedocs.io/en/stable/discord.html#inviting-your-bot)
+5. Verify (working on test server)
 6. Send announcement.
 
 ## v0.4 (future)
