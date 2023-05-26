@@ -35,6 +35,18 @@ Once config is done, `make` is used for everthing else:
 * `make venv` - run pip install to build the python environment
 * `make clean` - remove all logging, unneeded files, etc.
 
+## deployment
+
+(working notes for current deployment, 05/26)
+
+Plan:
+1. Clone to deployment host (`git clone https://github.com/philion/taskbot`)
+2. Add config file with secrets (as per **`config`** above)
+3. (optional) Add watchdog/autostart to deployment host. Just run in BG for now.
+4. Invite bot to CSN discord.
+5. Verify
+6. Send announcement.
+
 ## v0.4 (future)
 TODO: Create an `OSTicketManager` class to integrate directly with OSTicket.
 
