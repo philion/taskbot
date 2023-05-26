@@ -119,15 +119,16 @@ class TaskCog(commands.Cog):
 
         tablestr = ''
         for row in result:
-            id = row['ID']
-            assigned = row['Point Person']
-            title = row['Task']
+            #id = row['ID']
+            pri = row['Urgency']
+            assigned = row['Point person']
+            title = row['Need']
 
             if len(str(id)) > 0 and len(title) > 0:
                 title = title.replace('\n', '')
                 if len(assigned) == 0:
                     assigned = 'unassigned'
-                tablestr = f'{tablestr}\n {id}: {title} ({assigned})'
+                tablestr = f'{tablestr}\n {pri}: {title} ({assigned})'
 
         log.debug(f'result: {tablestr}')
         
